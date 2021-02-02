@@ -10,19 +10,10 @@ pipeline {
         stage('Build') {
             steps {
                 // Get some code from a GitHub repository
-                git 'https://github.com/andressm2000/pipeline.git'
+                git 'https://github.com/spring-guides/getting-started-guides.git'
 
                 // Run Maven on a Unix agent.
-                sh "mvn clean package -DskipTest=true -f complete/pom.xml"
-            }
-
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
-                }
+                sh "mvn clean package -DskipTests=true -f complete/pom.xml"
             }
         }
 		stage('Test') {
@@ -33,15 +24,6 @@ pipeline {
                 // Run Maven on a Unix agent.
                 sh "mvn test -f complete/pom.xml"
             }
-
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
-                }
-            }
         }
 		stage('Deploy') {
             steps {
@@ -50,15 +32,6 @@ pipeline {
 
                 // Run Maven on a Unix agent.
                 sh "mvn spring-boot:run -f complete/pom.xml"
-            }
-
-            post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts 'target/*.jar'
-                }
             }
         }
     }
