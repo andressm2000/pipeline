@@ -10,7 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Get some code from a GitHub repository
-                git 'https://github.com/spring-guides/getting-started-guides.git'
+                git 'https://github.com/andressm2000/pipeline.git'
 
                 // Run Maven on a Unix agent.
                 sh "mvn clean package -DskipTests=true -f complete/pom.xml"
